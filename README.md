@@ -1,3 +1,8 @@
+
+chmod +x build deploy entrypoint.sh run start stop
+
+
+
 # docker-remote-desktop
 
 [![build](https://github.com/scottyhardy/docker-remote-desktop/actions/workflows/build.yml/badge.svg)](https://github.com/scottyhardy/docker-remote-desktop/actions/workflows/build.yml)

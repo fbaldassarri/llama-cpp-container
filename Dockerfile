@@ -35,32 +35,48 @@ FROM continuumio/miniconda3:$TAG
 
 RUN apt-get update \
     && DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
-        # dbus-x11 \
-        # firefox \
         git \
         locales \
-        # pavucontrol \
-        # pulseaudio \
-        # pulseaudio-utils \
         sudo \
-        # x11-xserver-utils \
-        # xfce4 \
-        # xfce4-goodies \
-        # xfce4-pulseaudio-plugin \
-        # xorgxrdp \
-        # xrdp \
-        # xubuntu-icon-theme \
         build-essential \
         dpkg-dev \
         wget \
         openssh-server \
+        nano \
     && rm -rf /var/lib/apt/lists/*
+
+# Setting up locales
 
 RUN locale-gen en_US.UTF-8
 ENV LANG en_US.UTF-8
 
-# COPY --from=builder /usr/lib/pulse-*/modules/module-xrdp-sink.so /usr/lib/pulse-*/modules/module-xrdp-source.so /var/lib/xrdp-pulseaudio-installer/
-COPY entrypoint.sh /usr/bin/entrypoint
-RUN chmod 755 /usr/bin/entrypoint
+# SSH exposition
+
 EXPOSE 22/tcp
-ENTRYPOINT ["/usr/bin/entrypoint"]
+RUN service ssh start
+
+# Create user
+
+RUN groupadd --gid 1020 llama-cpp-group
+# RUN useradd -m llama-cpp-user -g users
+RUN useradd -rm -d /home/llama-cpp-user -s /bin/bash -g users -G sudo,llama-cpp-group -u 1000 llama-cpp-user
+# RUN usermod -aG sudo,users llama-cpp-user
+
+# COPY --from=builder /usr/lib/pulse-*/modules/module-xrdp-sink.so /usr/lib/pulse-*/modules/module-xrdp-source.so /var/lib/xrdp-pulseaudio-installer/
+# COPY entrypoint.sh /usr/bin/entrypoint
+# RUN chmod 755 /usr/bin/entrypoint
+# ENTRYPOINT ["/usr/bin/entrypoint"]
+
+# Update user password
+RUN echo 'llama-cpp-user:admin' | chpasswd
+
+# Run shell
+CMD ["/bin/bash"]
+
+# Create virtalenv
+
+# Download latest llama-cpp
+
+# Download model
+
+

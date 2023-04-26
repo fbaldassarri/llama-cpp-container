@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-docker run -it \
-    --rm \
-    --hostname="$(hostname)" \
-    --publish="221:22/tcp" \
-    --name="llama-cpp-container" \
-    --shm-size="12g" \
-    llama-cpp-container:latest /bin/bash

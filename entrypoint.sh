@@ -5,9 +5,10 @@
 # useradd --shell /bin/bash --uid 1020 --gid 1020 --password $(openssl passwd ubuntu) --create-home --home-dir /home/ubuntu ubuntu
 # usermod -aG sudo ubuntu
 
-groupadd --gid 1020 llama-cpp-group
-useradd --shell /bin/bash --uid 1020 --gid 1020 --password $(openssl passwd llama) --create-home --home-dir /home/llama-cpp-user llama-cpp-user
-usermod -aG sudo,users llama-cpp-user
+# groupadd --gid 1020 llama-cpp-group
+# useradd --shell /bin/bash --uid 1020 --gid 1020 --password $(openssl passwd llama) --create-home --home-dir /home/llama-cpp-user llama-cpp-user
+# useradd -m llama-cpp-user -g users 
+# usermod -aG sudo,users llama-cpp-user
 
 # Start xrdp sesman service
 # /usr/sbin/xrdp-sesman

@@ -53,6 +53,7 @@ RUN apt-get update \
         build-essential \
         dpkg-dev \
         wget \
+        openssh-server \
     && rm -rf /var/lib/apt/lists/*
 
 RUN locale-gen en_US.UTF-8

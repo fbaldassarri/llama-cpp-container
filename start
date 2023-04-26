@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+docker run --detach \
+    --rm \
+    --hostname="$(hostname)" \
+    --publish="221:22/tcp" \
+    --name="llama-cpp-container" \
+    llama-cpp-container:latest

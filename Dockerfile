@@ -70,25 +70,38 @@ RUN useradd -rm -d /home/llama-cpp-user -s /bin/bash -G users,sudo,llama-cpp-gro
 # Update user password
 RUN echo 'llama-cpp-user:admin' | chpasswd
 
-# Adding ownership of /opt/conda to $user
+# Updating conda to the latest version
+RUN conda update conda -y
 
+# Create virtalenv
+RUN conda create -n llamacpp -y python=3.10.6
+
+# Adding ownership of /opt/conda to $user
 RUN chown -R llama-cpp-user:users /opt/conda
 
 # conda init bash for $user
 RUN su - llama-cpp-user -c "conda init bash"
 
-# Updating conda to the latest version
-RUN su - llama-cpp-user -c "conda update conda -y"
+# Download latest github/llama-cpp in llama.cpp directory and compile it
+RUN su - llama-cpp-user -c "git clone https://github.com/ggerganov/llama.cpp.git ~/llama.cpp \
+                            && cd ~/llama.cpp \
+                            && make "
 
-# Run shell
-CMD ["/bin/bash"]
-
-# Create virtalenv
-
-RUN conda create -n llamacpp -y python=3.10.6
-
-# Download latest github/llama-cpp in llama-cpp directory
+# Install Requirements for python virtualenv
+RUN su - llama-cpp-user -c "cd ~/llama.cpp \
+                            && conda activate llamacpp \
+                            && python3 -m pip install -r requirements.txt " 
 
 # Download model
+# RUN su - llama-cpp-user -c "https://github.com/facebookresearch/llama.git ~/llama \
+#                            && cd ~/llama \
+#                            && ./download.sh "
+
+# Preparing for login
+ENV HOME /home/llama-cpp-user
+WORKDIR ${HOME}/llama.cpp
+USER llama-cpp-user
+CMD ["/bin/bash"]
+
 
 

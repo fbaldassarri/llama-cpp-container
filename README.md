@@ -5,11 +5,17 @@ chmod +x build entrypoint.sh start stop
 
 ./start
 
+# To connect locally
+
 docker container attach llama-cpp-container
 
+# To connect remotly thorugh SSH
 
+ssh 
 
+# To stop the container running
 
+./stop
 
 # docker-remote-desktop
 

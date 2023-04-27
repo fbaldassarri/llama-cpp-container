@@ -59,7 +59,7 @@ RUN service ssh start
 
 RUN groupadd --gid 1020 llama-cpp-group
 # RUN useradd -m llama-cpp-user -g users
-RUN useradd -rm -d /home/llama-cpp-user -s /bin/bash -g users -G sudo,llama-cpp-group -u 1000 llama-cpp-user
+RUN useradd -rm -d /home/llama-cpp-user -s /bin/bash -G users,sudo,llama-cpp-group -u 1000 llama-cpp-user
 # RUN usermod -aG sudo,users llama-cpp-user
 
 # COPY --from=builder /usr/lib/pulse-*/modules/module-xrdp-sink.so /usr/lib/pulse-*/modules/module-xrdp-source.so /var/lib/xrdp-pulseaudio-installer/
@@ -70,12 +70,24 @@ RUN useradd -rm -d /home/llama-cpp-user -s /bin/bash -g users -G sudo,llama-cpp-
 # Update user password
 RUN echo 'llama-cpp-user:admin' | chpasswd
 
+# Adding ownership of /opt/conda to $user
+
+RUN chown -R llama-cpp-user:users /opt/conda
+
+# conda init bash for $user
+RUN su - llama-cpp-user -c "conda init bash"
+
+# Updating conda to the latest version
+RUN su - llama-cpp-user -c "conda update conda -y"
+
 # Run shell
 CMD ["/bin/bash"]
 
 # Create virtalenv
 
-# Download latest llama-cpp
+RUN conda create -n llamacpp -y python=3.10.6
+
+# Download latest github/llama-cpp in llama-cpp directory
 
 # Download model
 

@@ -1,5 +1,13 @@
 
-chmod +x build deploy entrypoint.sh run start stop
+chmod +x build entrypoint.sh start stop
+
+./build
+
+./start
+
+docker container attach llama-cpp-container
+
+
 
 
 

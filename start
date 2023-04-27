@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# docker run --detach \
-#     --rm \
-#     --hostname="$(hostname)" \
-#     --publish="221:22/tcp" \
-#     --name="llama-cpp-container" \
-#     llama-cpp-container:latest
-
 # docker run -dit --name llama-cpp-container -p 221:22 continuumio/miniconda3:latest
 
-docker run -dit --name llama-cpp-container -p 221:22 llama-cpp-container:latest
+docker run -dit --name llama-cpp-container -p 221:22 --runtime=nvidia --gpus all --shm-size="12gb" --restart unless-stopped llama-cpp-container:latest
